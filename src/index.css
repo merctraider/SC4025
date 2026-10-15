@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens — owner: yeechen630.
+ * Taken from the low-fidelity wireframes (IBM Plex, near-black buttons,
+ * blue for Uber Peak features). Change them here and every screen follows.
+ */
+@theme {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --color-ink: #1f1f1f;
+  --color-muted: #5e5e5e;
+  --color-line: #e2e2e2;
+  --color-edge: #c9c9c9;
+  --color-fill: #efefef;
+  --color-peak: #1f5fbf;
+  --color-peak-dark: #174a96;
+  --color-late: #b3261e;
+  --color-ok: #1e7a46;
+  --color-stage: #e7e5e0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-stage);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

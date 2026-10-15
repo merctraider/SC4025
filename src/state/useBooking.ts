@@ -1,0 +1,85 @@
+import { useMemo } from 'react';
+import { WEEKLY_CREDIT_CAP } from '../config/businessRules';
+import { getDemandScenario, getDriver, getTrip, rideOptions } from '../data';
+import {
+  addMinutes,
+  calculateDriverEarnings,
+  calculateDriverSurgeShare,
+  calculateFare,
+  calculateLateCredit,
+  isPeak,
+  scaleFareInputs,
+} from '../lib';
+import { PICKUP_OUTCOMES } from './types';
+import { useAppState } from './useAppState';
+
+/**
+ * Everything a screen needs about the current booking, derived from state +
+ * mock data + shared logic. Feature components should read numbers from here
+ * rather than recalculating, so every screen shows the same figures.
+ */
+export function useBooking() {
+  const s = useAppState();
+
+  return useMemo(() => {
+    const trip = getTrip(s.tripId);
+    const driver = getDriver(trip.driverId);
+    const scenario = getDemandScenario(trip.demandScenarioId);
+    const rideOption = rideOptions.find((r) => r.type === s.rideType) ?? rideOptions[0];
+    const fareInputs = scaleFareInputs(trip, rideOption.fareFactor);
+
+    const multiplier = s.surgeOn ? s.multiplier : 1.0;
+    const peak = isPeak(multiplier);
+    const fare = calculateFare(fareInputs, multiplier);
+    const driverSurgeShare = calculateDriverSurgeShare(fare.surgeAmount);
+    const driverEarnings = calculateDriverEarnings(fareInputs, multiplier);
+
+    // F3 pickup promise
+    const promisedAt = addMinutes(trip.bookedAt, trip.promisedPickupMinutes);
+    const minutesLate = PICKUP_OUTCOMES.find((o) => o.id === s.pickupOutcome)?.minutesLate ?? 0;
+    const isLate = minutesLate > 0;
+    const arrivedAt = addMinutes(promisedAt, minutesLate);
+    // The demo only reaches R6/R7 if the ride goes ahead, so rideCompleted = true.
+    // TODO(chun1108, F3): handle the "rider cancels" branch from R5.
+    const credit = peak ? calculateLateCredit(minutesLate, s.creditsUsedThisWeek, true) : 0;
+    const creditsUsedAfterTrip = Math.min(
+      s.creditsUsedThisWeek + (credit > 0 ? 1 : 0),
+      WEEKLY_CREDIT_CAP,
+    );
+    const dropOffAt = addMinutes(arrivedAt, trip.rideDurationMinutes);
+
+    return {
+      trip,
+      driver,
+      scenario,
+      rideOption,
+      fareInputs,
+      multiplier,
+      reason: s.reason,
+      peak,
+      fare,
+      driverSurgeShare,
+      driverEarnings,
+      bookedAt: trip.bookedAt,
+      promisedAt,
+      arrivedAt,
+      dropOffAt,
+      minutesLate,
+      isLate,
+      credit,
+      creditsUsedBefore: s.creditsUsedThisWeek,
+      creditsUsedAfterTrip,
+      forecast: scenario.forecast,
+    };
+  }, [
+    s.tripId,
+    s.rideType,
+    s.surgeOn,
+    s.multiplier,
+    s.reason,
+    s.pickupOutcome,
+    s.creditsUsedThisWeek,
+  ]);
+}
+
+export type Booking = ReturnType<typeof useBooking>;
