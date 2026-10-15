@@ -31,6 +31,11 @@ export function useBooking() {
     const multiplier = s.surgeOn ? s.multiplier : 1.0;
     const peak = isPeak(multiplier);
     const fare = calculateFare(fareInputs, multiplier);
+    // Total fare for every ride type, for the R1 ride options list.
+    const optionFares = rideOptions.map((opt) => ({
+      type: opt.type,
+      total: calculateFare(scaleFareInputs(trip, opt.fareFactor), multiplier).total,
+    }));
     const driverSurgeShare = calculateDriverSurgeShare(fare.surgeAmount);
     const driverEarnings = calculateDriverEarnings(fareInputs, multiplier);
 
@@ -58,6 +63,7 @@ export function useBooking() {
       reason: s.reason,
       peak,
       fare,
+      optionFares,
       driverSurgeShare,
       driverEarnings,
       bookedAt: trip.bookedAt,
