@@ -1,28 +1,33 @@
 /**
  * F3 · Peak Pickup Promise — R4 Booking confirmed.
+ * Promise shown upfront and free (PRD 4.5 R4). Tier rows come from LATE_CREDIT_TIERS.
  * OWNER: chun1108
- *
- * TODO(chun1108):
- *  - Final design: large promised clock time, the two credit tiers, "no claim needed".
- *  - Tier rows are generated from LATE_CREDIT_TIERS in config; keep it that way.
  */
 import { Divider, FeatureArea, Row } from '../../components';
-import { LATE_CREDIT_TIERS } from '../../config/businessRules';
+import { WEEKLY_CREDIT_CAP } from '../../config/businessRules';
 import { formatClock, formatMoney } from '../../lib';
 import { useBooking } from '../../state';
+import { ClockIcon } from './ClockIcon';
+import { creditTiersAscending } from './promiseRules';
 
 export function PickupPromiseCard() {
   const b = useBooking();
   if (!b.peak) return null;
-  const tiers = [...LATE_CREDIT_TIERS].sort((a, z) => a.minMinutesLate - z.minMinutesLate);
   return (
     <FeatureArea feature="F3" title="Peak pickup promise" className="flex flex-col gap-2.5">
-      <span className="text-sm text-muted">Pickup promised by</span>
-      <div className="text-[40px] leading-none font-semibold tabular-nums">
+      <span className="flex items-center gap-1.5 text-sm font-semibold text-peak">
+        <ClockIcon className="h-4 w-4" />
+        Peak pickup promise
+      </span>
+      <div className="text-[40px] leading-none font-semibold whitespace-nowrap tabular-nums">
         {formatClock(b.promisedAt)}
       </div>
+      <span className="text-sm text-muted">
+        In {b.trip.promisedPickupMinutes} min · booked {formatClock(b.bookedAt)}
+      </span>
       <Divider />
-      {tiers.map((t) => (
+      <span className="text-sm text-muted">If your driver is late</span>
+      {creditTiersAscending.map((t) => (
         <Row
           key={t.minMinutesLate}
           label={`More than ${t.minMinutesLate} min late`}
@@ -30,7 +35,8 @@ export function PickupPromiseCard() {
         />
       ))}
       <p className="m-0 text-[13px] text-muted">
-        Added automatically after your ride. No claim needed.
+        Free and automatic: added after your ride, no claim needed. Up to {WEEKLY_CREDIT_CAP}{' '}
+        credits per week.
       </p>
     </FeatureArea>
   );
