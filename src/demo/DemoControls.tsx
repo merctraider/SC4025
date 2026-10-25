@@ -1,5 +1,6 @@
 /**
  * Demo controls — collapsible panel shown on every screen for the presenter.
+ * Docked below the phone on mobile (never over it); floating on desktop.
  * Owner: Jon Teo (F5). Every control writes to shared state (src/state).
  */
 import type { ReactNode } from 'react';
@@ -74,7 +75,7 @@ export function DemoControls() {
   return (
     <aside
       aria-label="Demo controls"
-      className="fixed right-3 bottom-3 z-50 w-[272px] max-w-[calc(100vw-24px)] rounded-xl border border-edge bg-white/95 text-ink shadow-lg backdrop-blur sm:right-5 sm:bottom-5"
+      className="w-full shrink-0 border-t border-edge bg-white text-ink sm:fixed sm:right-5 sm:bottom-5 sm:z-50 sm:w-[272px] sm:rounded-xl sm:border sm:bg-white/95 sm:shadow-lg sm:backdrop-blur"
     >
       <button
         type="button"
@@ -88,7 +89,7 @@ export function DemoControls() {
         </span>
       </button>
       {s.demoPanelOpen && (
-        <div className="flex max-h-[70vh] flex-col gap-3 overflow-y-auto border-t border-line px-3 pt-3 pb-3">
+        <div className="flex max-h-[45dvh] flex-col sm:max-h-[70vh] gap-3 overflow-y-auto border-t border-line px-3 pt-3 pb-3">
           <Field label="Trip">
             <select
               className={selectCls}

@@ -18,15 +18,17 @@ import { AppStateProvider } from './state';
 
 function Stage() {
   return (
-    <div className="flex min-h-full flex-col items-center sm:justify-center sm:gap-5 sm:py-6">
-      <div className="hidden sm:block">
+    // Mobile: switcher bar, phone, demo controls stacked in one viewport-high
+    // column so nothing floats over the phone's buttons. The phone fills the
+    // space between (overriding PhoneFrame's own full-viewport height).
+    <div className="flex h-dvh flex-col items-center sm:h-auto sm:min-h-full sm:justify-center sm:gap-5 sm:py-6">
+      <div className="flex w-full shrink-0 justify-center border-b border-line bg-white py-2 sm:w-auto sm:border-0 sm:bg-transparent sm:py-0">
         <AppSwitcher />
       </div>
-      <PhoneFrame>
-        <Outlet />
-      </PhoneFrame>
-      <div className="fixed top-3 left-1/2 z-40 -translate-x-1/2 sm:hidden">
-        <AppSwitcher />
+      <div className="flex min-h-0 w-full flex-1 flex-col max-sm:*:h-full sm:w-auto sm:flex-none">
+        <PhoneFrame>
+          <Outlet />
+        </PhoneFrame>
       </div>
       <DemoControls />
     </div>
