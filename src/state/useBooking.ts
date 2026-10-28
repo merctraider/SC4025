@@ -6,6 +6,7 @@ import {
   calculateDriverEarnings,
   calculateDriverSurgeShare,
   calculateFare,
+  calculateFareForecast,
   calculateLateCredit,
   isPeak,
   scaleFareInputs,
@@ -38,6 +39,9 @@ export function useBooking() {
     }));
     const driverSurgeShare = calculateDriverSurgeShare(fare.surgeAmount);
     const driverEarnings = calculateDriverEarnings(fareInputs, multiplier);
+
+    // F2 fare forecast
+    const forecast = calculateFareForecast(fareInputs, multiplier, scenario);
 
     // F3 pickup promise
     const promisedAt = addMinutes(trip.bookedAt, trip.promisedPickupMinutes);
@@ -75,7 +79,7 @@ export function useBooking() {
       credit,
       creditsUsedBefore: s.creditsUsedThisWeek,
       creditsUsedAfterTrip,
-      forecast: scenario.forecast,
+      forecast,
     };
   }, [
     s.tripId,
