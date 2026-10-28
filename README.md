@@ -135,7 +135,7 @@ Everything in `src/data/` is mock data and clearly marked as such. When the fina
 
 ## Changes from the original spec
 
-The build prompt said to follow the team's two artifacts where they differ from it. I read both on 14 Oct 2026 (Chapter 4 PRD doc and the "Uber Peak Wireframes" canvas). Differences, and what the code does:
+ Differences, and what the code does:
 
 1. **R5 has two buttons, not one preset-driven button.** The wireframe shows "Driver arrived on time" (→ R7) and a secondary "Demo: driver arrives 7 min late" (→ R6). Built that way. The Demo-controls preset still matters: it sets the tracker status (On track / Late) and whether the late button says 7 or 12 min. The default preset is "On time" so the reference walkthrough matches the wireframe ("On track").
 2. **R6** has a map placeholder above the credit block, and its explanation reads "Added to your account when this ride ends. You don't need to do anything." Promised and arrived times share one line ("Promised 6:42 pm · arrived 6:49 pm").
