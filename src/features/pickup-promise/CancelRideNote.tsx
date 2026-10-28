@@ -1,60 +1,20 @@
 /**
- * F3 · Peak Pickup Promise — cancel ride on R5. PRD 4.4: if the rider cancels after
- * booking, the promise no longer applies and no credit is given. Confirming clears the
- * per-trip state and returns to R1.
+ * F3 · Peak Pickup Promise — cancel note on R5.
  * OWNER: chun1108
+ *
+ * TODO(chun1108): cancel flow (confirm sheet → back to R1, no credit given; PRD 4.4 edge cases).
  */
-import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components';
-import { useAppState, useBooking } from '../../state';
-import { PromiseSheet } from './PromiseSheet';
-
 export function CancelRideNote() {
-  const b = useBooking();
-  const { finishTrip } = useAppState();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const close = useCallback(() => setOpen(false), []);
-
   return (
-    <>
-      <p className="m-0 text-center text-[13px] text-muted">
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="min-h-11 underline decoration-dotted underline-offset-2"
-        >
-          Cancel ride
-        </button>
-        {b.peak && ' · no credit is given if you cancel'}
-      </p>
-      {open && (
-        <PromiseSheet
-          title="Cancel this ride?"
-          onClose={close}
-          actions={
-            <>
-              <Button onClick={close}>Keep my ride</Button>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  finishTrip();
-                  navigate('/rider');
-                }}
-              >
-                Cancel ride
-              </Button>
-            </>
-          }
-        >
-          <p className="m-0">
-            {b.peak
-              ? "Your pickup promise no longer applies, and you won't get a late-pickup credit for this ride."
-              : "You'll go back to trip entry."}
-          </p>
-        </PromiseSheet>
-      )}
-    </>
+    <p className="m-0 text-center text-[13px] text-muted">
+      <button
+        type="button"
+        className="cursor-not-allowed underline decoration-dotted underline-offset-2"
+        title="Not built yet (F3)"
+      >
+        Cancel ride
+      </button>{' '}
+      · no credit is given if you cancel
+    </p>
   );
 }
