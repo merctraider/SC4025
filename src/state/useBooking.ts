@@ -44,8 +44,8 @@ export function useBooking() {
     const minutesLate = PICKUP_OUTCOMES.find((o) => o.id === s.pickupOutcome)?.minutesLate ?? 0;
     const isLate = minutesLate > 0;
     const arrivedAt = addMinutes(promisedAt, minutesLate);
-    // The demo only reaches R6/R7 if the ride goes ahead, so rideCompleted = true.
-    // TODO(chun1108, F3): handle the "rider cancels" branch from R5.
+    // Only completed rides reach R6/R7: cancelling on R5 returns to R1 (F3
+    // CancelRideNote), so rideCompleted = true here.
     const credit = peak ? calculateLateCredit(minutesLate, s.creditsUsedThisWeek, true) : 0;
     const creditsUsedAfterTrip = Math.min(
       s.creditsUsedThisWeek + (credit > 0 ? 1 : 0),
