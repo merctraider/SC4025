@@ -1,46 +1,63 @@
 /**
  * F2 · Fare Forecast — main block on R3.
- * OWNER: SahnUzall
- *
- * TODO(SahnUzall):
- *  - Replace the chart placeholder with a small trend chart (now → 15 → 30 min).
- *  - Forecast values come from mock data (src/data/demandScenarios.ts). PRD 4.3
- *    asks for "a simple rule-based fare forecast, calculated from mock demand
- *    levels": write it as a pure function in src/lib with tests, so ranges move
- *    when the Demo-controls multiplier changes.
- *  - Always show a range + confidence label, never a single price (PRD 4.1.6).
- *  - Keep the disclaimer (FORECAST_DISCLAIMER in config).
+ * Shows current fare, rule-based forecast ranges with confidence levels,
+ * SVG trend chart, and mandatory forecast disclaimer.
  */
-import { Divider, FeatureArea, Placeholder, StubNote } from '../../components';
+import { Divider, FeatureArea } from '../../components';
 import { FORECAST_DISCLAIMER } from '../../config/businessRules';
 import { formatMoney, formatMoneyRange } from '../../lib';
 import { useBooking } from '../../state';
+import { FareTrendChart } from './FareTrendChart';
 
 export function FareForecast() {
   const b = useBooking();
+
   return (
     <FeatureArea feature="F2" title="Fare forecast" className="flex flex-col gap-3.5">
+      {/* Current Fare */}
       <div className="flex items-baseline justify-between">
-        <span className="text-[15px]">Now</span>
-        <strong className="text-xl tabular-nums">{formatMoney(b.fare.total)}</strong>
-      </div>
-      {b.forecast.map((f) => (
-        <div key={f.horizonMinutes} className="flex flex-col gap-3.5">
-          <Divider />
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-1">
-              <span className="text-[15px]">In {f.horizonMinutes} min</span>
-              <span className="font-mono text-[11px] text-muted uppercase">
-                {f.confidence} confidence
-              </span>
-            </div>
-            <strong className="text-xl tabular-nums">{formatMoneyRange(f.low, f.high)}</strong>
-          </div>
+        <div className="flex flex-col">
+          <span className="text-[15px] font-medium text-ink">Now</span>
+          <span className="text-xs text-muted">Current peak rate</span>
         </div>
-      ))}
-      <Placeholder label="Fare trend chart: next 30 min" className="h-[120px]" />
-      <p className="m-0 text-[13px] text-muted">{FORECAST_DISCLAIMER}</p>
-      <StubNote owner="SahnUzall">trend chart + rule-based forecast from demand level</StubNote>
+        <strong className="text-xl tabular-nums text-ink">{formatMoney(b.fare.total)}</strong>
+      </div>
+
+      {/* Forecast Horizons */}
+      {b.forecast.map((f) => {
+        const isConfident = f.confidence === 'High';
+        const isMed = f.confidence === 'Medium';
+        const badgeColor = isConfident
+          ? 'bg-ok/10 text-ok'
+          : isMed
+            ? 'bg-peak/10 text-peak'
+            : 'bg-fill text-muted';
+
+        return (
+          <div key={f.horizonMinutes} className="flex flex-col gap-3.5">
+            <Divider />
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-1">
+                <span className="text-[15px] font-medium text-ink">In {f.horizonMinutes} min</span>
+                <span
+                  className={`inline-flex w-fit items-center rounded-md px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase ${badgeColor}`}
+                >
+                  {f.confidence} confidence
+                </span>
+              </div>
+              <strong className="text-xl tabular-nums text-ink">
+                {formatMoneyRange(f.low, f.high)}
+              </strong>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Dynamic SVG Trend Chart */}
+      <FareTrendChart currentFare={b.fare.total} forecast={b.forecast} bookedAt={b.bookedAt} />
+
+      {/* Mandatory Disclaimer */}
+      <p className="m-0 text-[13px] leading-relaxed text-muted">{FORECAST_DISCLAIMER}</p>
     </FeatureArea>
   );
 }
