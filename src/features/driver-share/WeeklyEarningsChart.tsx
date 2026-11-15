@@ -72,10 +72,7 @@ export function WeeklyEarningsChart({ days }: { days: readonly DailyEarnings[] }
             const offPeakHeight = (day.offPeak / ceiling) * plotHeight;
             return (
               <g key={day.day}>
-                <title>
-                  {day.day}: peak {formatMoney(day.peak)}, off-peak {formatMoney(day.offPeak)},
-                  total {formatMoney(roundMoney(day.peak + day.offPeak))}
-                </title>
+                <title>{`${day.day}: peak ${formatMoney(day.peak)}, off-peak ${formatMoney(day.offPeak)}, total ${formatMoney(roundMoney(day.peak + day.offPeak))}`}</title>
                 <rect
                   x={x}
                   y={plotHeight - peakHeight}
