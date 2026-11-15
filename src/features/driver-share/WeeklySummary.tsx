@@ -1,52 +1,50 @@
 /**
  * F4 · Driver Surge Share — D2 weekly summary block.
  * OWNER: jon_paul18
- *
- * TODO(jon_paul18):
- *  - Replace the chart placeholder with a stacked bar chart (Mon–Sun, peak vs off-peak).
- *  - Decide whether the stats should be "this week" or "last week" (wireframe mixes both).
- *  - Totals are summed from src/data/driverWeeklyEarnings.ts.
+ * Totals and chart share the same daily mock data. The explicit week label
+ * identifies the demo period independently of the device's current date.
  */
-import { FeatureArea, Placeholder, StubNote } from '../../components';
+import { Divider, FeatureArea } from '../../components';
 import { DRIVER_SURGE_SHARE } from '../../config/businessRules';
 import { getWeeklyEarnings } from '../../data';
-import { formatMoney, roundMoney } from '../../lib';
-import { useBooking } from '../../state';
+import { formatMoney } from '../../lib';
+import { summarizeWeeklyEarnings } from '../../lib/driverWeeklyEarnings';
+import { useAppState, useBooking } from '../../state';
+import { WeeklyEarningsChart } from './WeeklyEarningsChart';
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-[13px] text-muted">{label}</span>
-      <strong className="text-[22px] tabular-nums">{value}</strong>
+    <div className="grid min-w-0 grid-rows-[1fr_auto] gap-1">
+      <dt className="text-[13px] leading-snug text-muted">{label}</dt>
+      <dd className="m-0 text-[22px] leading-tight font-semibold tabular-nums">{value}</dd>
     </div>
   );
 }
 
 export function WeeklySummary() {
   const b = useBooking();
+  const { showFeatureLabels } = useAppState();
   const week = getWeeklyEarnings(b.driver.id);
-  const sum = (pick: (d: (typeof week.days)[number]) => number) =>
-    roundMoney(week.days.reduce((acc, d) => acc + pick(d), 0));
-  const peak = sum((d) => d.peak);
-  const total = roundMoney(peak + sum((d) => d.offPeak));
-  const surge = sum((d) => d.surgeShare);
-  const trips = week.days.reduce((acc, d) => acc + d.peakTrips, 0);
+  const summary = summarizeWeeklyEarnings(week.days);
   return (
     <FeatureArea feature="F4" title="Weekly summary" className="flex flex-col gap-3">
-      <div className="grid grid-cols-2 gap-3">
-        <Stat label="Total earnings" value={formatMoney(total)} />
+      {!showFeatureLabels && (
+        <h2 className="m-0 font-mono text-[11px] font-medium tracking-wider text-peak uppercase">
+          Weekly summary
+        </h2>
+      )}
+      <p className="m-0 text-xs text-muted">Demo week · {week.weekLabel}</p>
+      <dl className="m-0 grid grid-cols-2 gap-x-3 gap-y-4">
+        <Stat label="Total earnings" value={formatMoney(summary.total)} />
         <Stat
           label={`From surge (your ${Math.round(DRIVER_SURGE_SHARE * 100)}%)`}
-          value={formatMoney(surge)}
+          value={formatMoney(summary.surgeShare)}
         />
-        <Stat label="Peak-hour earnings" value={formatMoney(peak)} />
-        <Stat label="Peak trips" value={String(trips)} />
-      </div>
-      <div className="h-px bg-line" />
-      <span className="text-sm">Earnings by day, peak vs off-peak</span>
-      <Placeholder label="Stacked bar chart: Mon–Sun" className="h-[180px]" />
-      <span className="text-xs text-muted">Week of {week.weekLabel}</span>
-      <StubNote owner="jon_paul18">stacked bar chart from driverWeeklyEarnings</StubNote>
+        <Stat label="Peak-hour earnings" value={formatMoney(summary.peak)} />
+        <Stat label="Peak trips" value={String(summary.peakTrips)} />
+      </dl>
+      <Divider />
+      <WeeklyEarningsChart days={summary.days} />
     </FeatureArea>
   );
 }

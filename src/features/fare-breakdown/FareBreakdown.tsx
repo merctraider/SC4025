@@ -2,49 +2,49 @@
  * F1 · Surge Fare Breakdown — R2 Fare screen block.
  * OWNER: sushruth2911
  *
- * TODO(sushruth2911):
- *  - Final visual design of the breakdown (hierarchy, spacing, the bold surge row).
- *  - Decide what the block shows when surge is off (currently: fare + "No surge").
- *  - Optional: a short "Why?" explainer per surge reason (one line max, PRD 4.1.6).
- *  - Keep it on the same screen as the fare, never behind a tap (PRD 4.1.6, US1).
- *  - Read every number from useBooking(); do not recalculate here.
+ * Shown on the same screen as the fare, never behind a tap (PRD 4.1.6, US1).
+ * Every number comes from useBooking(); nothing is recalculated here.
+ *
+ * Hierarchy: total → why it's high (chip + reason + one-line explainer) → line items.
+ * No-surge state: shows the standard fare and line items, hides all surge rows.
  */
-import { Chip, Divider, FeatureArea, Row, StubNote } from '../../components';
-import { DRIVER_SURGE_SHARE } from '../../config/businessRules';
+import { Chip, Divider, FeatureArea } from '../../components';
 import { formatMoney, formatMultiplier } from '../../lib';
 import { useBooking } from '../../state';
+import { BreakdownRows } from './BreakdownRows';
+import { SURGE_REASON_EXPLAINER } from './surgeReasons';
 
 export function FareBreakdown() {
   const b = useBooking();
-  const driverPct = Math.round(DRIVER_SURGE_SHARE * 100);
+  const explainer = b.peak ? SURGE_REASON_EXPLAINER[String(b.reason)] : undefined;
+
   return (
     <FeatureArea feature="F1" title="Surge breakdown" className="flex flex-col gap-3">
-      <div className="text-[40px] leading-none font-semibold tabular-nums">
-        {formatMoney(b.fare.total)}
+      {/* 1. The price */}
+      <div className="flex flex-col gap-1">
+        <span className="text-[13px] text-muted">{b.peak ? 'Peak fare' : 'Fare'}</span>
+        <div className="text-[40px] leading-none font-semibold tabular-nums">
+          {formatMoney(b.fare.total)}
+        </div>
       </div>
+
+      {/* 2. Why it's this price */}
       {b.peak ? (
-        <div className="flex items-center gap-2 text-[15px]">
-          <Chip>{formatMultiplier(b.multiplier)}</Chip>
-          <span>{b.reason}</span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2 text-[15px] font-medium">
+            <Chip>{formatMultiplier(b.multiplier)}</Chip>
+            <span>{b.reason}</span>
+          </div>
+          {explainer && <p className="text-[13px] text-muted">{explainer}</p>}
         </div>
       ) : (
-        <div className="text-[15px] text-muted">No surge right now</div>
+        <p className="text-[15px] text-muted">No surge right now. You're paying the standard fare.</p>
       )}
+
       <Divider />
-      <Row label="Base fare" value={formatMoney(b.fareInputs.baseFare)} />
-      <Row label="Distance and time" value={formatMoney(b.fareInputs.distanceAndTime)} />
-      {b.peak && (
-        <>
-          <Row label="Surge" value={formatMoney(b.fare.surgeAmount)} bold />
-          <Row
-            label={`Goes to your driver (${driverPct}%)`}
-            value={formatMoney(b.driverSurgeShare)}
-            muted
-            indent
-          />
-        </>
-      )}
-      <StubNote owner="sushruth2911">F1 layout roughed in; final design + no-surge state</StubNote>
+
+      {/* 3. Line items */}
+      <BreakdownRows variant="fare" />
     </FeatureArea>
   );
 }
