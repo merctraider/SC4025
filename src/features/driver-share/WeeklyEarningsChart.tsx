@@ -12,14 +12,14 @@ export function WeeklyEarningsChart({ days }: { days: readonly DailyEarnings[] }
 
   return (
     <figure className="m-0 flex min-w-0 flex-col gap-2">
-      <figcaption className="text-sm font-medium">Earnings by day, peak vs off-peak</figcaption>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+      <figcaption className="text-[17px] font-semibold">Earnings by day</figcaption>
+      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-muted">
         <span className="flex items-center gap-1.5">
           <span aria-hidden="true" className="h-2.5 w-2.5 rounded-sm bg-peak" />
           Peak
         </span>
         <span className="flex items-center gap-1.5">
-          <span aria-hidden="true" className="h-2.5 w-2.5 rounded-sm border border-edge bg-line" />
+          <span aria-hidden="true" className="h-2.5 w-2.5 rounded-sm bg-bar" />
           Off-peak
         </span>
       </div>
@@ -85,7 +85,7 @@ export function WeeklyEarningsChart({ days }: { days: readonly DailyEarnings[] }
                   y={plotHeight - peakHeight - offPeakHeight}
                   width="24"
                   height={offPeakHeight}
-                  className="fill-line"
+                  className="fill-bar"
                 />
               </g>
             );

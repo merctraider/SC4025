@@ -66,7 +66,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
   const potentialSavings = Math.max(0, Math.round(currentFare - in30.low));
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-line bg-fill/30 p-3">
+    <div className="flex flex-col gap-2 rounded-2xl bg-white p-4 text-peak shadow-card">
       <div className="flex items-center justify-between text-xs">
         <span className="font-semibold text-ink">Fare trend forecast</span>
         {potentialSavings > 0 ? (
@@ -78,7 +78,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
 
       <svg
         viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-        className="w-full overflow-visible"
+        className="w-full overflow-visible text-peak"
         role="img"
         aria-label={`Fare trend chart: current fare ${formatMoney(currentFare)}, in 15 min ${formatMoneyRange(
           in15.low,
@@ -87,9 +87,9 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
       >
         <defs>
           <linearGradient id="envelopeGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#1F5FBF" stopOpacity="0.10" />
-            <stop offset="50%" stopColor="#1F5FBF" stopOpacity="0.16" />
-            <stop offset="100%" stopColor="#1F5FBF" stopOpacity="0.22" />
+            <stop offset="0%" stopColor="currentColor" stopOpacity="0.10" />
+            <stop offset="50%" stopColor="currentColor" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="currentColor" stopOpacity="0.22" />
           </linearGradient>
         </defs>
 
@@ -99,7 +99,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={getY(maxVal)}
           x2={x2 + 10}
           y2={getY(maxVal)}
-          stroke="#e2e2e2"
+          stroke="var(--color-line)"
           strokeDasharray="2,2"
         />
         <line
@@ -107,7 +107,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={getY(minVal)}
           x2={x2 + 10}
           y2={getY(minVal)}
-          stroke="#e2e2e2"
+          stroke="var(--color-line)"
           strokeDasharray="2,2"
         />
 
@@ -121,7 +121,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={y1High}
           x2={x1}
           y2={y1Low}
-          stroke="#1F5FBF"
+          stroke="currentColor"
           strokeWidth="2.5"
           strokeLinecap="round"
           opacity="0.6"
@@ -131,7 +131,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={y1High}
           x2={x1 + 4}
           y2={y1High}
-          stroke="#1F5FBF"
+          stroke="currentColor"
           strokeWidth="1.5"
           opacity="0.8"
         />
@@ -140,7 +140,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={y1Low}
           x2={x1 + 4}
           y2={y1Low}
-          stroke="#1F5FBF"
+          stroke="currentColor"
           strokeWidth="1.5"
           opacity="0.8"
         />
@@ -151,7 +151,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={y2High}
           x2={x2}
           y2={y2Low}
-          stroke="#1F5FBF"
+          stroke="currentColor"
           strokeWidth="2.5"
           strokeLinecap="round"
           opacity="0.6"
@@ -161,7 +161,7 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={y2High}
           x2={x2 + 4}
           y2={y2High}
-          stroke="#1F5FBF"
+          stroke="currentColor"
           strokeWidth="1.5"
           opacity="0.8"
         />
@@ -170,18 +170,24 @@ export function FareTrendChart({ currentFare, forecast, bookedAt }: FareTrendCha
           y1={y2Low}
           x2={x2 + 4}
           y2={y2Low}
-          stroke="#1F5FBF"
+          stroke="currentColor"
           strokeWidth="1.5"
           opacity="0.8"
         />
 
         {/* Center trend line */}
-        <path d={trendLine} fill="none" stroke="#1F5FBF" strokeWidth="2.5" strokeLinecap="round" />
+        <path
+          d={trendLine}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
 
         {/* Data points */}
-        <circle cx={x0} cy={y0} r="5" fill="#1F5FBF" stroke="#FFFFFF" strokeWidth="2" />
-        <circle cx={x1} cy={y1Mid} r="3.5" fill="#1F5FBF" />
-        <circle cx={x2} cy={y2Mid} r="3.5" fill="#1F5FBF" />
+        <circle cx={x0} cy={y0} r="5" fill="currentColor" stroke="#FFFFFF" strokeWidth="2" />
+        <circle cx={x1} cy={y1Mid} r="3.5" fill="currentColor" />
+        <circle cx={x2} cy={y2Mid} r="3.5" fill="currentColor" />
 
         {/* Price labels */}
         <text x={x0} y={y0 - 10} textAnchor="middle" className="fill-ink text-[12px] font-semibold">

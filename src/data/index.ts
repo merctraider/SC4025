@@ -8,6 +8,7 @@
  */
 import { demandScenarios } from './demandScenarios';
 import { drivers } from './drivers';
+import { driverHourlyEarnings } from './driverHourlyEarnings';
 import { driverWeeklyEarnings } from './driverWeeklyEarnings';
 import { riders } from './riders';
 import { trips } from './trips';
@@ -18,6 +19,7 @@ export { drivers, DEFAULT_DRIVER_ID } from './drivers';
 export { riders, DEFAULT_RIDER_ID } from './riders';
 export { demandScenarios } from './demandScenarios';
 export { driverWeeklyEarnings } from './driverWeeklyEarnings';
+export { driverHourlyEarnings } from './driverHourlyEarnings';
 export { rideOptions } from './rideOptions';
 
 function mustFind<T extends { id: string }>(list: T[], id: string, kind: string): T {
@@ -33,4 +35,8 @@ export const getDemandScenario = (id: string) => mustFind(demandScenarios, id, '
 export const getWeeklyEarnings = (driverId: string) => {
   const found = driverWeeklyEarnings.find((w) => w.driverId === driverId);
   return found ?? driverWeeklyEarnings[0];
+};
+export const getHourlyEarnings = (driverId: string) => {
+  const found = driverHourlyEarnings.find((h) => h.driverId === driverId);
+  return found ?? driverHourlyEarnings[0];
 };

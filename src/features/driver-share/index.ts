@@ -3,3 +3,4 @@ export { SurgeShareCard } from './SurgeShareCard';
 export { TripEarningsCard } from './TripEarningsCard';
 export { WeeklySummary } from './WeeklySummary';
 export { BusiestSurgeTimes } from './BusiestSurgeTimes';
+export { HourlyEarningsChart } from './HourlyEarningsChart';

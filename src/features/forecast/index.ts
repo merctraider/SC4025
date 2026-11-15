@@ -2,4 +2,4 @@
 export { ForecastTeaser } from './ForecastTeaser';
 export { FareForecast } from './FareForecast';
 export { FareTrendChart } from './FareTrendChart';
-export { FareDropAlert } from './FareDropAlert';
+export { FareDropAlert, FareDropAlertButton } from './FareDropAlert';

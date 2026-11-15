@@ -19,11 +19,11 @@ export function CancelRideNote() {
 
   return (
     <>
-      <p className="m-0 text-center text-[13px] text-muted">
+      <p className="m-0 flex flex-wrap items-center gap-x-1 text-[13px] text-muted">
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="min-h-11 underline decoration-dotted underline-offset-2"
+          className="min-h-11 text-base font-semibold text-peak hover:text-peak-dark"
         >
           Cancel ride
         </button>
@@ -35,9 +35,12 @@ export function CancelRideNote() {
           onClose={close}
           actions={
             <>
-              <Button onClick={close}>Keep my ride</Button>
+              <Button onClick={close} arrow={false}>
+                Keep my ride
+              </Button>
               <Button
                 variant="secondary"
+                arrow={false}
                 onClick={() => {
                   finishTrip();
                   navigate('/rider');

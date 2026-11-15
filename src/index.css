@@ -2,24 +2,65 @@
 
 /*
  * Design tokens — owner: yeechen630.
- * Taken from the low-fidelity wireframes (IBM Plex, near-black buttons,
- * blue for Uber Peak features). Change them here and every screen follows.
+ * Taken from the high-fidelity designs (PRD 4.5): Inter, indigo primary,
+ * white cards on a lavender canvas, gradient hero cards for Uber Peak
+ * features. Change them here and every screen follows.
  */
 @theme {
-  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-  --color-ink: #1f1f1f;
-  --color-muted: #5e5e5e;
-  --color-line: #e2e2e2;
-  --color-edge: #c9c9c9;
-  --color-fill: #efefef;
-  --color-peak: #1f5fbf;
-  --color-peak-dark: #174a96;
-  --color-late: #b3261e;
-  --color-ok: #1e7a46;
+  /* Text and lines */
+  --color-ink: #141a2e;
+  --color-muted: #5b6275;
+  --color-line: #e6e8ef;
+  --color-edge: #d5d8e3;
+  --color-fill: #f0f1f6;
+
+  /* Surfaces */
+  --color-canvas: #f4f5fa;
   --color-stage: #e7e5e0;
-  
+
+  /* Uber Peak indigo (buttons, links, feature highlights) */
+  --color-peak: #4338ca;
+  --color-peak-dark: #3730a3;
+  --color-peak-soft: #eef0fe;
+  --color-peak-violet: #6d28d9;
+
+  /* Status */
+  --color-late: #b3261e;
+  --color-ok: #15803d;
+  --color-ok-soft: #e8f8ee;
+  --color-warn: #9a4a00;
+  --color-warn-soft: #fff4e0;
+  --color-info: #1d5fae;
+  --color-info-soft: #eaf4ff;
+  --color-info-edge: #a9cdf3;
+
+  /* Chart: non-surge bars */
+  --color-bar: #c3c8d6;
+
+  /* "Show feature labels" annotations */
+  --color-label: #1f5fbf;
+}
+
+/* Indigo → violet gradient used by the feature hero cards. */
+@utility bg-hero {
+  background-image:
+    radial-gradient(circle at 105% -10%, rgb(255 255 255 / 0.14) 0 28%, transparent 29%),
+    radial-gradient(circle at 100% 110%, rgb(255 255 255 / 0.1) 0 22%, transparent 23%),
+    linear-gradient(120deg, #3b2fc4 0%, #4f2fd0 55%, #6d28d9 100%);
+}
+
+/* Soft card shadow from the designs. */
+@utility shadow-card {
+  box-shadow:
+    0 1px 2px rgb(20 26 46 / 0.04),
+    0 4px 14px rgb(20 26 46 / 0.06);
+}
+
+@utility shadow-button {
+  box-shadow: 0 8px 20px rgb(67 56 202 / 0.28);
 }
 
 html,

@@ -1,24 +1,24 @@
 /** R3 · Forecast (/rider/forecast). F2. Page owner: Jon Teo. */
-import { BackButton, Button, Screen } from '../../components';
-import { FareDropAlert, FareForecast } from '../../features/forecast';
-import { formatMoney } from '../../lib';
-import { useBooking } from '../../state';
+import { Button, Screen } from '../../components';
+import { FareDropAlert, FareDropAlertButton, FareForecast } from '../../features/forecast';
 
 export function ForecastPage() {
-  const b = useBooking();
   return (
     <Screen
-      code="R3 · Forecast"
+      code="R3 / F2 · Wait or book"
+      title="Fare forecast"
+      back={{ to: '/rider/fare', label: 'Back to fare' }}
       footer={
         <>
-          <FareDropAlert />
-          <Button to="/rider/confirmed">Book now · {formatMoney(b.fare.total)}</Button>
+          <FareDropAlertButton />
+          <Button variant="text" to="/rider/fare">
+            Return to current fare
+          </Button>
         </>
       }
     >
-      <BackButton to="/rider/fare" label="Back to fare" />
-      <h1 className="m-0 text-[26px] font-semibold">Will the fare drop?</h1>
       <FareForecast />
+      <FareDropAlert />
     </Screen>
   );
 }

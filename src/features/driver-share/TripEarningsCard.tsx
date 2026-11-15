@@ -5,7 +5,7 @@
  * The configurable demo commission applies only to the pre-surge fare.
  * Keep the surge share separate so the net earnings visibly reconcile.
  */
-import { Card, Divider, Row } from '../../components';
+import { Card, CardTitle, Divider, Row } from '../../components';
 import { COMMISSION_IS_PLACEHOLDER, COMMISSION_RATE_PLACEHOLDER } from '../../config/businessRules';
 import { formatMoney } from '../../lib';
 import { useBooking } from '../../state';
@@ -15,7 +15,8 @@ export function TripEarningsCard() {
   const e = b.driverEarnings;
   const pct = Math.round(COMMISSION_RATE_PLACEHOLDER * 100);
   return (
-    <Card className="gap-3">
+    <Card className="gap-3.5">
+      <CardTitle>Net trip earnings</CardTitle>
       <Row label="Base fare + distance and time" value={formatMoney(e.preSurge)} />
       <Row
         label={`Less commission (${pct}%)`}

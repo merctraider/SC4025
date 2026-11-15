@@ -91,3 +91,18 @@ export interface DriverWeeklyEarnings {
   days: DailyEarnings[];
   busiestSurgeTimes: BusySurgeWindow[];
 }
+
+/** One online hour on the D2 hourly chart. Hours with no online time are omitted. */
+export interface HourlyEarnings {
+  /** 0–23, start of the hour. */
+  hour: number;
+  /** Average S$ per online hour from the fare before surge. */
+  nonSurge: number;
+  /** Average S$ per online hour from the driver's 90% surge share. */
+  surgeShare: number;
+}
+
+export interface DriverHourlyEarnings {
+  driverId: string;
+  days: Record<DailyEarnings['day'], HourlyEarnings[]>;
+}

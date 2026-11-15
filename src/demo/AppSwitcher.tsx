@@ -5,7 +5,7 @@ export function AppSwitcher() {
   const { pathname } = useLocation();
   const driver = pathname.startsWith('/driver');
   const cls = (on: boolean) =>
-    `rounded-full px-4 py-1.5 text-sm font-semibold no-underline ${on ? 'bg-ink text-white' : 'text-ink hover:bg-white/60'}`;
+    `rounded-full px-4 py-1.5 text-sm font-semibold whitespace-nowrap no-underline ${on ? 'bg-ink text-white' : 'text-ink hover:bg-white/60'}`;
   return (
     <nav
       aria-label="Switch app"

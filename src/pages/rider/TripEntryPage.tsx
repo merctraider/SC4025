@@ -4,10 +4,14 @@ import { RideOptions, TripEntryForm } from '../../features/booking';
 
 export function TripEntryPage() {
   return (
-    <Screen code="R1 · Trip entry" footer={<Button to="/rider/fare">See fare</Button>}>
-      <h1 className="m-0 text-[28px] font-semibold">Where to?</h1>
+    <Screen
+      code="R1 / F5 · Trip entry"
+      title="Where to?"
+      footer={<Button to="/rider/fare">See fare</Button>}
+    >
+      <Placeholder map label="Map preview · no live location or GPS" />
       <TripEntryForm />
-      <Placeholder label="Map placeholder" grow />
+      <h2 className="m-0 mt-1 text-[19px] font-semibold">Choose a ride</h2>
       <RideOptions />
     </Screen>
   );
