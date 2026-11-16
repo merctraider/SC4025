@@ -8,7 +8,7 @@
 import { Link } from 'react-router-dom';
 import { Button, CardTitle, CheckList } from '../../components';
 import { FARE_DROP_ALERT_EXPIRY_MIN } from '../../config/businessRules';
-import { addMinutes, formatClock, formatMoney } from '../../lib';
+import { addMinutes, calculateFare, formatClock, formatMoney } from '../../lib';
 import { useAppState, useBooking } from '../../state';
 
 export function FareDropAlert() {
@@ -20,9 +20,10 @@ export function FareDropAlert() {
     addMinutes(fareAlertSetAt ?? b.bookedAt, FARE_DROP_ALERT_EXPIRY_MIN),
   );
 
-  // Use the 15-minute low forecast as the simulated dropped fare, formatted to cents
-  const in15 = b.forecast.find((f) => f.horizonMinutes === 15);
-  const droppedFare = in15 ? in15.low : Math.max(1, Math.round(b.fare.total - 4));
+  // Use a lower surge multiplier for the simulated dropped fare
+  const droppedMultiplier = b.multiplier > 1.2 ? Number((b.multiplier - 0.2).toFixed(2)) : 1.0;
+  const droppedFareResult = calculateFare(b.fareInputs, droppedMultiplier);
+  const droppedFare = droppedFareResult.total;
   const savings = Math.max(0, b.fare.total - droppedFare);
 
   if (fareAlertSetAt) {
@@ -52,7 +53,14 @@ export function FareDropAlert() {
           </div>
 
           <Link
-            to="/rider/fare"
+            to="/rider/confirmed"
+            onClick={() =>
+              update({
+                multiplier: droppedMultiplier,
+                surgeOn: droppedMultiplier > 1.0,
+                fareAlertSetAt: null,
+              })
+            }
             className="mt-1 flex min-h-11 items-center justify-center rounded-full bg-white px-3 text-center text-sm font-semibold text-peak no-underline transition-colors hover:bg-peak-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Book at {formatMoney(droppedFare)} →
