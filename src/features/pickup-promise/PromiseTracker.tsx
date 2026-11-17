@@ -42,7 +42,8 @@ function TrackerBody({
   arrivalMinutes: number;
 }) {
   const b = useBooking();
-  const [elapsed, setElapsed] = useState(0);
+  // When a late outcome is selected in Demo controls, initialize to arrival time so the late state is immediately visible.
+  const [elapsed, setElapsed] = useState(() => (b.minutesLate > 0 ? arrivalMinutes : 0));
   const [rematched, setRematched] = useState(false);
   const t = trackPickup(elapsed, promisedMinutes, arrivalMinutes);
   const arrived = t.status === 'arrived';

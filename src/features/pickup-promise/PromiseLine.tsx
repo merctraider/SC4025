@@ -42,6 +42,12 @@ export function PromiseLine() {
             Pickup by {formatClock(b.promisedAt)}
           </strong>
           <span className="text-[15px] text-white/80">Fixed when you book during surge.</span>
+          {b.isLate && (
+            <span className="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-1 text-[13px] font-medium text-white">
+              <Icon name="clock" className="h-3.5 w-3.5" />
+              Demo preset: driver arrives {b.minutesLate} min late ({formatClock(b.arrivedAt)})
+            </span>
+          )}
         </div>
         <Divider className="bg-white/20" />
         <CheckList items={rules} className="text-[14px] text-white/95" iconClassName="text-white" />

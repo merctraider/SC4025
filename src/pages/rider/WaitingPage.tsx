@@ -26,24 +26,48 @@ export function WaitingPage() {
       back={{ to: '/rider/confirmed', label: 'Back to booking confirmed' }}
       footer={
         <>
-          <Button
-            onClick={() => {
-              update({ pickupOutcome: 'onTime' });
-              navigate('/rider/complete');
-            }}
-          >
-            Demo: on-time pickup · finish ride
-          </Button>
-          {b.peak && (
-            <Button
-              variant="secondary"
-              onClick={() => {
-                update({ pickupOutcome: latePreset });
-                navigate('/rider/credit');
-              }}
-            >
-              {`Demo: pickup at ${lateClock} (+${lateMinutes} min)`}
-            </Button>
+          {b.isLate ? (
+            <>
+              <Button
+                onClick={() => {
+                  update({ pickupOutcome });
+                  navigate('/rider/credit');
+                }}
+              >
+                {`Demo: pickup at ${lateClock} (+${b.minutesLate} min) · view credit`}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  update({ pickupOutcome: 'onTime' });
+                  navigate('/rider/complete');
+                }}
+              >
+                Demo: on-time pickup · finish ride
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() => {
+                  update({ pickupOutcome: 'onTime' });
+                  navigate('/rider/complete');
+                }}
+              >
+                Demo: on-time pickup · finish ride
+              </Button>
+              {b.peak && (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    update({ pickupOutcome: 'late7' });
+                    navigate('/rider/credit');
+                  }}
+                >
+                  {`Demo: pickup at ${lateClock} (+${lateMinutes} min)`}
+                </Button>
+              )}
+            </>
           )}
           <CancelRideNote />
         </>

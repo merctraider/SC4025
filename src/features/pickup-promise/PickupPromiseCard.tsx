@@ -28,6 +28,12 @@ export function PickupPromiseCard() {
       <span className="text-[15px] text-white/80">
         Included free · Original booking {formatClock(b.bookedAt)}
       </span>
+      {b.isLate && (
+        <span className="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-1 text-[13px] font-medium text-white">
+          <Icon name="clock" className="h-3.5 w-3.5" />
+          Demo preset: driver arrives {b.minutesLate} min late ({formatClock(b.arrivedAt)})
+        </span>
+      )}
     </FeatureArea>
   );
 }
